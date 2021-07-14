@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang = "zh-CN">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Visualization of Crime in San Francisco</title>
+		<link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+		<link href="lib/Font-Awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="lib/cal-heatmap.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="lib/d3.min.js"></script>
+		<script type="text/javascript" src="lib/jquery.min.js"></script>
+		<script type="text/javascript" src="lib/d3.tip.v0.6.3.js"></script>
+		<script type="text/javascript" src="lib/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="lib/cal-heatmap.min.js"></script>
+
+		<link href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css'
+		  rel='stylesheet' type='text/css'/>
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css">
+		<link href='css/bootstrap.css' type='text/css'/>
+		<link href='css/bootstrap.css.map' type='text/css'/>
+		<link href='css/bootstrap.min.css' type='text/css'/>
+		<link href='css/jquery.css' type='text/css'/>
+		<script src="js/jquery.js"></script>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.9/d3.min.js"></script>
+		<script src="L.D3SvgOverlay.min.js"></script>
+		<script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
+
+		<script src="js/d3.js"></script>
+		<script src="js/d3tip.js"></script>
+
+		<script type="text/javascript" src="js/timeLine.js"></script>
+		<script src="js/map.js"></script>
+		<link href="css/index_control.css" rel="stylesheet" type="text/css">
+
+	</head>
+	<body>
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="navbar-header">
+	      		<a class="navbar-brand" href="#"><b>Visualization of Crime in San Francisco</b></a>
+	   		</div>
+	        <div class="container"></div>
+    	</div>
+
+    	<div id="outer-div">
+	    	<div id="smBarchart"></div>
+	    	<div id="map-canvas"></div>
+	    	<div id="timeline">
+	    		<label class="checkbox-inline">
+	    		    <input type="radio" name="optionsRadiosinline" id="heatRadio" value="heat" checked> heatmap
+	    		     <input type="radio" name="optionsRadiosinline" id="pointRadio"  value="point"> pointmap
+	    		</label>
+	    	</div>
+	    	<div id="linechart1">
+				<button id="showAll" class="btn-xs">
+					<i>
+						Total Time
+					</i>
+				</button>  
+	    	</div>
+	    	<div id="bubble"></div>
+	    	<div id="calendar" style="position: absolute;">
+    			<button id="heatmap-previous" class="btn-xs"><i class="glyphicon glyphicon-chevron-left"></i></button>  
+                <button id="heatmap-next" class="btn-xs"><i class="glyphicon glyphicon-chevron-right"></i></button>  
+	    	</div>
+	    	<div id="starPlot"></div>
+    	</div>
+    	<script type="text/javascript" src="js/dataprocess.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/bubble.js"></script>
+				<script type="text/javascript" src="js/d3-starPlot.js"></script>
+
+		<script type="text/javascript" src="js/linechart.js">
+		</script>
+		<script type="text/javascript" src="js/starPlot.js"></script>
+		<script type="text/javascript" src="js/smBarchart.js"></script>
+		<script type="text/javascript" src="js/calendar.js"></script>
+		<script>
+			var map=new drawMap();
+			d3.csv("data/SFPD_Incidents.csv",function(data){
+
+			  cities=data.map(function(d){
+			    d.X=+d.X;
+			    d.Y=+d.Y;
+			    d.latLng=[d.Y,d.X];
+			    d.timestamp=Date.parse(new Date(d.Date+" "+d.Time));
+			    return d;
+			  })
+
+			  gData=cities
+
+			  cities.sort(function(a,b){
+			    return a.timestamp-b.timestamp;
+			  })
+
+			  var barData=[]
+			  start=Date.parse("9/14/2016 00:00");
+			  end=Date.parse("12/16/2016 00:00");
+
+			  for(var i=start;i<end;){
+			    var up=i+3600000*24;
+			    var sum=0;
+
+			    for(var j=0;j<cities.length;j++){
+			      if(cities[j].timestamp>=i&&cities[j].timestamp<=up){
+			        sum+=1
+			      }
+			    }
+			    barData.push({"time":i,"value":sum})
+			    i=up;
+			  }
+
+			  //console.log(gData)
+
+			  var timeLine=new drawTimeline(barData)
+			 // console.log(barData)
+			  $("#heatRadio").click(function(){
+			    map.updateHeat(quakePoints)
+			  });
+
+			  $("#pointRadio").click(function(){
+			    map.update(cities)
+			  });
+
+			});
+
+		</script>
+
+	</body>
+</html>

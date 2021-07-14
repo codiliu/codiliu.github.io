@@ -1,0 +1,69 @@
+.navbar, .footer {
+    /*background-color: #1abc9c;*/
+    background-image: linear-gradient(120deg, #155799, #159957);
+    background-color: #00A2E2;
+    border-color: #16a085;   
+    color: white;
+}
+
+.navbar .nav>li>a:hover {
+    color: black;
+}
+
+
+.navbar .nav>li>a:focus {
+    color: black;
+}
+
+.navbar .nav>li>a {
+    color: white;
+}
+
+.footer {
+    margin-top: 50px;
+    padding: 15px 30px;
+}
+
+
+.gray-container {
+    background-color: #eee;
+}
+
+#about {
+    margin-top: 50px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-bottom: 20px;
+}
+
+@keyframes me-img-hover {
+    0% {transform: rotate(-15deg);}
+    25% {transform: rotate(0deg);}
+    50% {transform: rotate(15deg);}
+    75% {transform: rotate(0deg);}
+    100% {transform: rotate(-15deg);}
+}
+
+#me-img {
+    width: 70%;
+    /*border: 10px solid #FFFFCC;*/
+    border: 8px solid #FFFFCC;
+    transform: rotate(-15deg);
+    box-shadow: 0px 0px 2px 3px rgba(255, 255, 255, 0.7), 0px 0px 10px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+#me-img:hover { 
+    animation: me-img-hover 2000ms linear 100ms infinite forwards;
+} 
+
+.work-img {
+/*    margin-left: 10%;
+    width: 80%;*/
+    width: 100%;
+}
+
+.work-block {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
